@@ -20,7 +20,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instructions: true,
+      instructions: false, //TODO: remember to change this before release. should be true
+      stuffType: 'text',
+      stuffName: '',
+      stuffGrid: this.testGrid,
     };
   }
 
@@ -30,11 +33,52 @@ class App extends Component {
     })
   }
 
+  addStuffButton = () => {
+  }
+
+  stuffType = (type) => {
+    this.setState({
+      stuffType: type
+    })
+  }
+
+  stuffName = (event) => {
+    this.setState({
+      stuffName: event.target.value
+    })
+  }
+
+  testGrid = {
+    headers:{
+      header1: 'checkbox',
+      header2: 'text',
+      header3: 'text',
+    },
+    rows:[
+      {
+        url: 'google.com',
+        values: {
+          header1: true,
+          header2: 'cats',
+          header3: 'dogs',
+        },
+      },
+      {
+        url: 'mcwebsite.net',
+        values: {
+          header1: false,
+          header2: 'Ann',
+          header3: 'David',
+        },
+      },
+    ]
+  }
+
   render = () => {
     if (this.state.instructions){
       return this.renderInstructions();
     } else {
-      return 'no instructions'
+      return this.renderGrid();
     }
   }
 
@@ -42,9 +86,26 @@ class App extends Component {
     return (
       <div id="instructions">
         These would be the instructions for how to use this mama jama.
-        <button type="button" onClick={this.okButton}>Got it!{this.state.foo}</button>
+        <button type="button" onClick={this.okButton}>Got it!</button>
       </div>
     )
+  }
+
+  renderGrid() {
+    const inputs = (
+      <div id="inputs">
+        <label htmlFor="label">What are you checking for?</label>
+        <input type="text" id="label" onChange={this.stuffName}></input>
+        <p> Will it be a...</p>
+        <input type="radio" id="text-input" name="stuffType" onChange={() => this.stuffType("text")}></input>
+        <label htmlFor="text-input">Text input</label>
+        <input type="radio" id="checkbox" name="stuffType" onChange={() => this.stuffType("checkbox")}></input>
+        <label htmlFor="checkbox">Checkbox</label>
+        <button type="button" onClick={this.addStuffButton}>Add to stuff</button>
+      </div>
+      //htmlfor required by react.js
+    )
+    return inputs
   }
 }
 
