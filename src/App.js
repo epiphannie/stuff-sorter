@@ -33,18 +33,14 @@ class App extends Component {
   }
 
   addStuffButton = () => {
-    console.log('added stuff')
     this.setState((state) => {
       state.stuffGrid.headers[state.stuffName] = state.stuffType
-      console.log('state' + state.stuffName)
       state.stuffName = ''
-      console.log('state' + state.stuffName)
       return state
     })
   }
 
   addRowButton = () => {
-    console.log('it worked')
     const rowURL = prompt("What website are you sorting?")
     if(rowURL === null || rowURL === '') {
       return
@@ -59,8 +55,6 @@ class App extends Component {
   }
 
   deleteButton = (i) => {
-    console.log('deleted')
-    console.log(i)
     this.setState((state) => {
       state.stuffGrid.rows.splice(i, 1)
       return state
@@ -159,7 +153,7 @@ class App extends Component {
         cells.push(<td key='delete' onClick={() => {
           this.deleteButton(i)
         }}>delete</td>)
-        cellements.push(<tr key={row.url}>{cells}</tr>)
+        cellements.push(<tr key={i}>{cells}</tr>)
       }//loop to make rows, y'all
     const grid = (
       <table key='table'>
