@@ -91,6 +91,15 @@ class App extends Component {
     )
   }
 
+
+  renderCellement(type, value) {
+    if (type == 'checkbox') {
+      return <input type='checkbox' checked={value}></input>
+    } else {
+      return <input type='text' value={value}></input>
+    }
+  }
+
   renderGrid() {
     const inputs = (
       <div id="inputs">
@@ -105,7 +114,33 @@ class App extends Component {
       </div>
       //htmlfor required by react.js
     )
-    return inputs
+
+    const headerElements = [<th>url</th>]
+      for(let i in this.state.stuffGrid.headers) {
+        headerElements.push(<th>{i}</th>)
+      }
+    const cellements = []
+      for(let row of this.state.stuffGrid.rows) {
+        const cells = [<td>{row.url}</td>]
+        for(let header in this.state.stuffGrid.headers) {
+          cells.push(<td>{this.renderCellement(this.state.stuffGrid.headers[header], row.values[header])}</td>)
+        }
+        cellements.push(<tr>{cells}</tr>)
+      }//loop to make rows, y'all
+    const grid = (
+      <table>
+        <thead>
+          {headerElements}
+        </thead>
+        <tbody>
+          {cellements}
+        </tbody>
+      </table>
+    )
+    return [
+      inputs,
+      grid
+    ]
   }
 }
 
