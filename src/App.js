@@ -97,15 +97,15 @@ class App extends Component {
 
   renderCellement(type, value) {
     if (type === 'checkbox') {
-      return <input type='checkbox' checked={value}></input>
+      return <input type='checkbox' checked={value} onChange={() => {console.log('checkbox was checked')}}></input>
     } else {
-      return <input type='text' value={value}></input>
+      return <input type='text' value={value} onChange={() => {console.log('text was changed')}}></input>
     }
   }
 
   renderGrid() {
     const inputs = (
-      <div id="inputs">
+      <div id="inputs" key='inputs'>
         <label htmlFor="label">What are you checking for?</label>
         <input type="text" id="label" onChange={this.stuffName}></input>
         <p> Will it be a...</p>
@@ -118,22 +118,24 @@ class App extends Component {
       //htmlfor required by react.js
     )
 
-    const headerElements = [<th>url</th>]
+    const headerElements = [<th key='url'>url</th>]
       for(let i in this.state.stuffGrid.headers) {
-        headerElements.push(<th>{i}</th>)
+        headerElements.push(<th key={i}>{i}</th>)
       }
     const cellements = []
       for(let row of this.state.stuffGrid.rows) {
-        const cells = [<td>{row.url}</td>]
+        const cells = [<td key='url'>{row.url}</td>]
         for(let header in this.state.stuffGrid.headers) {
-          cells.push(<td>{this.renderCellement(this.state.stuffGrid.headers[header], row.values[header])}</td>)
+          cells.push(<td key={header}>{this.renderCellement(this.state.stuffGrid.headers[header], row.values[header])}</td>)
         }
-        cellements.push(<tr>{cells}</tr>)
+        cellements.push(<tr key={row.url}>{cells}</tr>)
       }//loop to make rows, y'all
     const grid = (
-      <table>
+      <table key='table'>
         <thead>
-          {headerElements}
+          <tr>
+            {headerElements}
+          </tr>
         </thead>
         <tbody>
           {cellements}
@@ -141,7 +143,7 @@ class App extends Component {
       </table>
     )
     const addRowButton =
-      <button onClick={this.addRowButton}>Add a new row!</button>
+      <button key='button' onClick={this.addRowButton}>Add a new row!</button>
 
     return [
       inputs,
