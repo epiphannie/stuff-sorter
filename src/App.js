@@ -61,6 +61,13 @@ class App extends Component {
     })
   }
 
+  cellementUpdate = (value, header, i) => {
+    this.setState((state) => {
+      state.stuffGrid.rows[i].values[header] = value
+      return state
+    })
+  }
+
   sortHeader = (headerName) => {
     this.setState((state) => {
       const currentOrder = state.stuffGrid.headers[headerName].sortOrder
@@ -88,6 +95,9 @@ class App extends Component {
   }
 
   testGrid = {
+    columnSortOrder: [
+      'header2', 'header3', 'header1'
+    ],
     headers:{
       header1: {
         type: 'checkbox',
@@ -140,11 +150,18 @@ class App extends Component {
   }
 
 
-  renderCellement(type, value) {
+  renderCellement(type, value, header, i) {
     if (type === 'checkbox') {
-      return <input type='checkbox' checked={value} onChange={() => {console.log('checkbox was checked')}}></input>
+      return (<input type='checkbox'
+                checked={this.state.stuffGrid.rows[i].values[header]}
+                onChange={(event) => this.cellementUpdate(event.target.checked, header, i)}
+                ></input>)
     } else {
-      return <input type='text' value={value} onChange={() => {console.log('text was changed')}}></input>
+      console.log([type, header, i, this.state.stuffGrid.rows[i].values[header]])
+      return (<input type='text'
+                value={this.state.stuffGrid.rows[i].values[header]}
+                onChange={(event) => this.cellementUpdate(event.target.value, header, i)}
+                ></input>)
     }
   }
 
@@ -179,16 +196,24 @@ class App extends Component {
           <i className="fas fa-trash-alt"></i>
           </th>)
       }
-      // <i class="fas fa-trash-alt"></i>
-      // <i class="fas fa-sort-up"></i>
-      // <i class="fas fa-sort-down"></i>
+    const sortedRows = this.state.stuffGrid.rows.slice()
+    sortedRows.sort((rowA, rowB) => {
+      for(let column of this.state.stuffGrid.columnSortOrder) {
+        if(rowA.values[column] > rowB.values[column]){
+          return 1
+        } else if (rowA.values[column] < rowB.values[column]){
+          return -1
+        }
+      }
+      return 0
+    })
 
     const cellements = []
-      for(let [i, row] of this.state.stuffGrid.rows.entries()) {
+      for(let [i, row] of sortedRows.entries()) {
         const cells = [<td key='url'>{row.url}</td>]
         for(let header in this.state.stuffGrid.headers) {
           cells.push(<td key={header}>
-            {this.renderCellement(this.state.stuffGrid.headers[header].type, row.values[header])}
+            {this.renderCellement(this.state.stuffGrid.headers[header].type, row.values[header], header, i)}
             </td>)
         }
         cells.push(<td key='delete' onClick={() => {
