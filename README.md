@@ -1,9 +1,11 @@
 TODO list:
-* column sorting
+* column sorting (manual drag/drop)
 * delete column
 * images for delete/sort
 * not garbage styling
-* persistence 
+* persistence
 * logo
 * hyperlinks for URLs
-* resorting -> manual drag and drop?
+* row sorting (clicking header)
+* change mouse hover for various functions
+* control for accidentally replacing columns by giving same name

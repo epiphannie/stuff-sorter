@@ -3,3 +3,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.fa-sort-up,
+.fa-sort-down,
+.fa-sort,
+.fa-trash-alt {
+  margin: 0 5px;
+}

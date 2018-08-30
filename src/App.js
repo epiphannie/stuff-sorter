@@ -34,14 +34,14 @@ class App extends Component {
 
   addStuffButton = () => {
     this.setState((state) => {
-      state.stuffGrid.headers[state.stuffName] = state.stuffType
+      state.stuffGrid.headers[state.stuffName] = {type: state.stuffType, sortOrder: 'none'}
       state.stuffName = ''
       return state
     })
   }
 
   addRowButton = () => {
-    const rowURL = prompt("What website are you sorting?")
+    const rowURL = prompt("Add a thing to sort")
     if(rowURL === null || rowURL === '') {
       return
     }
@@ -75,27 +75,36 @@ class App extends Component {
 
   testGrid = {
     headers:{
-      // header1: 'checkbox',
-      // header2: 'text',
-      // header3: 'text',
+      header1: {
+        type: 'checkbox',
+        sortOrder: 'asc'
+      },
+      header2: {
+        type: 'text',
+        sortOrder: 'desc'
+      },
+      header3: {
+        type: 'text',
+        sortOrder: 'none',
+      },
     },
     rows:[
-      // {
-      //   url: 'google.com',
-      //   values: {
-      //     header1: true,
-      //     header2: 'cats',
-      //     header3: 'dogs',
-      //   },
-      // },
-      // {
-      //   url: 'mcwebsite.net',
-      //   values: {
-      //     header1: false,
-      //     header2: 'Ann',
-      //     header3: 'David',
-      //   },
-      // },
+      {
+        url: 'google.com',
+        values: {
+          header1: true,
+          header2: 'cats',
+          header3: 'dogs',
+        },
+      },
+      {
+        url: 'mcwebsite.net',
+        values: {
+          header1: false,
+          header2: 'Ann',
+          header3: 'David',
+        },
+      },
     ]
   }
 
@@ -142,13 +151,31 @@ class App extends Component {
 
     const headerElements = [<th key='url'></th>]
       for(let i in this.state.stuffGrid.headers) {
-        headerElements.push(<th key={i}>{i}</th>)
+        const order = this.state.stuffGrid.headers[i].sortOrder
+        const iconClass = ["fas"]
+        if (order === 'asc') {
+          iconClass.push("fa-sort-up")
+        } else if (order === 'desc'){
+          iconClass.push("fa-sort-down")
+        } else {
+          iconClass.push("fa-sort")
+        }
+        headerElements.push(<th key={i}>{i}
+          <i className={iconClass.join(' ')}></i>
+          <i className="fas fa-trash-alt"></i>
+          </th>)
       }
+      // <i class="fas fa-trash-alt"></i>
+      // <i class="fas fa-sort-up"></i>
+      // <i class="fas fa-sort-down"></i>
+
     const cellements = []
       for(let [i, row] of this.state.stuffGrid.rows.entries()) {
         const cells = [<td key='url'>{row.url}</td>]
         for(let header in this.state.stuffGrid.headers) {
-          cells.push(<td key={header}>{this.renderCellement(this.state.stuffGrid.headers[header], row.values[header])}</td>)
+          cells.push(<td key={header}>
+            {this.renderCellement(this.state.stuffGrid.headers[header].type, row.values[header])}
+            </td>)
         }
         cells.push(<td key='delete' onClick={() => {
           this.deleteButton(i)
