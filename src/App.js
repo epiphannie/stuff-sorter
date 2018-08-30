@@ -35,6 +35,10 @@ class App extends Component {
   addStuffButton = () => {
   }
 
+  addRowButton = () => {
+    console.log('it worked')
+  }
+
   stuffType = (type) => {
     this.setState({
       stuffType: type
@@ -136,9 +140,13 @@ class App extends Component {
         </tbody>
       </table>
     )
+    const addRowButton =
+      <button onClick={this.addRowButton}>Add a new row!</button>
+
     return [
       inputs,
-      grid
+      grid,
+      addRowButton
     ]
   }
 }
