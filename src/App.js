@@ -33,10 +33,29 @@ class App extends Component {
   }
 
   addStuffButton = () => {
+    console.log('added stuff')
+    this.setState((state) => {
+      state.stuffGrid.headers[state.stuffName] = state.stuffType
+      console.log('state' + state.stuffName)
+      state.stuffName = ''
+      console.log('state' + state.stuffName)
+      return state
+    })
   }
 
   addRowButton = () => {
     console.log('it worked')
+    const rowURL = prompt("What website are you sorting?")
+    if(rowURL === null || rowURL === '') {
+      return
+    }
+    this.setState((state) => {
+      state.stuffGrid.rows.push({
+        url: rowURL,
+        values: ['', '', ''] //TODO defaults from headers
+      })
+      return state
+    })
   }
 
   stuffType = (type) => {
@@ -53,27 +72,27 @@ class App extends Component {
 
   testGrid = {
     headers:{
-      header1: 'checkbox',
-      header2: 'text',
-      header3: 'text',
+      // header1: 'checkbox',
+      // header2: 'text',
+      // header3: 'text',
     },
     rows:[
-      {
-        url: 'google.com',
-        values: {
-          header1: true,
-          header2: 'cats',
-          header3: 'dogs',
-        },
-      },
-      {
-        url: 'mcwebsite.net',
-        values: {
-          header1: false,
-          header2: 'Ann',
-          header3: 'David',
-        },
-      },
+      // {
+      //   url: 'google.com',
+      //   values: {
+      //     header1: true,
+      //     header2: 'cats',
+      //     header3: 'dogs',
+      //   },
+      // },
+      // {
+      //   url: 'mcwebsite.net',
+      //   values: {
+      //     header1: false,
+      //     header2: 'Ann',
+      //     header3: 'David',
+      //   },
+      // },
     ]
   }
 
@@ -107,18 +126,18 @@ class App extends Component {
     const inputs = (
       <div id="inputs" key='inputs'>
         <label htmlFor="label">What are you checking for?</label>
-        <input type="text" id="label" onChange={this.stuffName}></input>
+        <input type="text" id="label" onChange={this.stuffName} value={this.state.stuffName}></input>
         <p> Will it be a...</p>
-        <input type="radio" id="text-input" name="stuffType" onChange={() => this.stuffType("text")}></input>
+        <input type="radio" id="text-input" name="stuffType" onChange={() => this.stuffType("text")} checked={this.state.stuffType === 'text'}></input>
         <label htmlFor="text-input">Text input</label>
-        <input type="radio" id="checkbox" name="stuffType" onChange={() => this.stuffType("checkbox")}></input>
+        <input type="radio" id="checkbox" name="stuffType" onChange={() => this.stuffType("checkbox")} checked={this.state.stuffType === 'checkbox'}></input>
         <label htmlFor="checkbox">Checkbox</label>
         <button type="button" onClick={this.addStuffButton}>Add to stuff</button>
       </div>
       //htmlfor required by react.js
     )
 
-    const headerElements = [<th key='url'>url</th>]
+    const headerElements = [<th key='url'></th>]
       for(let i in this.state.stuffGrid.headers) {
         headerElements.push(<th key={i}>{i}</th>)
       }
