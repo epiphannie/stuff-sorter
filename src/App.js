@@ -61,6 +61,20 @@ class App extends Component {
     })
   }
 
+  sortHeader = (headerName) => {
+    this.setState((state) => {
+      const currentOrder = state.stuffGrid.headers[headerName].sortOrder
+      if (currentOrder === 'asc') {
+        state.stuffGrid.headers[headerName].sortOrder = 'desc'
+      } else if (currentOrder === 'desc') {
+        state.stuffGrid.headers[headerName].sortOrder = 'none'
+      } else {
+          state.stuffGrid.headers[headerName].sortOrder = 'asc'
+      }
+      return state
+    })
+  }
+
   stuffType = (type) => {
     this.setState({
       stuffType: type
@@ -161,7 +175,7 @@ class App extends Component {
           iconClass.push("fa-sort")
         }
         headerElements.push(<th key={i}>{i}
-          <i className={iconClass.join(' ')}></i>
+          <i className={iconClass.join(' ')} onClick={() => this.sortHeader(i)}></i>
           <i className="fas fa-trash-alt"></i>
           </th>)
       }
