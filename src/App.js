@@ -58,6 +58,15 @@ class App extends Component {
     })
   }
 
+  deleteButton = (i) => {
+    console.log('deleted')
+    console.log(i)
+    this.setState((state) => {
+      state.stuffGrid.rows.splice(i, 1)
+      return state
+    })
+  }
+
   stuffType = (type) => {
     this.setState({
       stuffType: type
@@ -142,11 +151,14 @@ class App extends Component {
         headerElements.push(<th key={i}>{i}</th>)
       }
     const cellements = []
-      for(let row of this.state.stuffGrid.rows) {
+      for(let [i, row] of this.state.stuffGrid.rows.entries()) {
         const cells = [<td key='url'>{row.url}</td>]
         for(let header in this.state.stuffGrid.headers) {
           cells.push(<td key={header}>{this.renderCellement(this.state.stuffGrid.headers[header], row.values[header])}</td>)
         }
+        cells.push(<td key='delete' onClick={() => {
+          this.deleteButton(i)
+        }}>delete</td>)
         cellements.push(<tr key={row.url}>{cells}</tr>)
       }//loop to make rows, y'all
     const grid = (
