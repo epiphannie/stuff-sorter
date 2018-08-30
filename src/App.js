@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 
@@ -93,7 +92,7 @@ class App extends Component {
 
 
   renderCellement(type, value) {
-    if (type == 'checkbox') {
+    if (type === 'checkbox') {
       return <input type='checkbox' checked={value}></input>
     } else {
       return <input type='text' value={value}></input>
