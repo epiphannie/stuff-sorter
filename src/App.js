@@ -78,9 +78,33 @@ class App extends Component {
       } else {
           state.stuffGrid.headers[headerName].sortOrder = 'asc'
       }
+
+      const sortedRows = state.stuffGrid.rows.slice()
+      sortedRows.sort((rowA, rowB) => {
+        for(let column of state.stuffGrid.columnSortOrder) {
+          const sortOrder = state.stuffGrid.headers[column].sortOrder
+          if(rowA.values[column] > rowB.values[column]){
+            if(sortOrder === 'asc') {
+              return 1
+            } else if(sortOrder === 'desc') {
+              return -1
+            }
+          } else if (rowA.values[column] < rowB.values[column]) {
+            if(sortOrder === 'asc') {
+              return -1
+            } else if (sortOrder === 'desc') {
+              return 1
+            }
+          }
+        }
+        return 0
+      })
+
+      state.stuffGrid.rows = sortedRows
       return state
     })
   }
+
 
   stuffType = (type) => {
     this.setState({
@@ -157,7 +181,6 @@ class App extends Component {
                 onChange={(event) => this.cellementUpdate(event.target.checked, header, i)}
                 ></input>)
     } else {
-      console.log([type, header, i, this.state.stuffGrid.rows[i].values[header]])
       return (<input type='text'
                 value={this.state.stuffGrid.rows[i].values[header]}
                 onChange={(event) => this.cellementUpdate(event.target.value, header, i)}
@@ -192,24 +215,14 @@ class App extends Component {
           iconClass.push("fa-sort")
         }
         headerElements.push(<th key={i}>{i}
-          <i className={iconClass.join(' ')} onClick={() => this.sortHeader(i)}></i>
-          <i className="fas fa-trash-alt"></i>
+          <i className={iconClass.join(' ')} onClick={() => this.sortHeader(i)}>S</i>
+          <i className="fas fa-trash-alt">T</i>
           </th>)
       }
-    const sortedRows = this.state.stuffGrid.rows.slice()
-    sortedRows.sort((rowA, rowB) => {
-      for(let column of this.state.stuffGrid.columnSortOrder) {
-        if(rowA.values[column] > rowB.values[column]){
-          return 1
-        } else if (rowA.values[column] < rowB.values[column]){
-          return -1
-        }
-      }
-      return 0
-    })
+
 
     const cellements = []
-      for(let [i, row] of sortedRows.entries()) {
+      for(let [i, row] of this.state.stuffGrid.rows.entries()) {
         const cells = [<td key='url'>{row.url}</td>]
         for(let header in this.state.stuffGrid.headers) {
           cells.push(<td key={header}>
